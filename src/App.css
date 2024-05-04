@@ -1,0 +1,52 @@
+#root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+
+/* global.css */
+
+body {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(37,37,37,1) 0%, rgba(89,89,89,1) 100%); /* Change la couleur de fond du body ici */
+}
+
+.bgBlack {
+  background-color: #252525;
+}
+
+.logo {
+  width: 75px;
+  height: auto;
+}
+
+
+.blurred-background {
+  background-color: black;
+  filter: blur(5px);
+}
+
+.bg-test {
+  background-color: black;
+  color: #fff;
+  z-index: 999;
+
+  &:hover {
+    background-color: #252525;
+  }
+}
+
+.gameRoom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin: 42px 0;
+}
+
