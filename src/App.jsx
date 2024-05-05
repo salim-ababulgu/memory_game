@@ -47,7 +47,7 @@ function App() {
         generateRandomPairs();
     }, []);
     
-
+  
     const shuffle = (array) => {
         let currentIndex = array.length, randomIndex;
 
@@ -117,17 +117,15 @@ function App() {
 
     return (
         <div>
-            <Modal />
             <Navbar />
-            <h1>Jeu du mémoire</h1>
+            <Modal />
             <div className='bg-black border mb-3 mt-5 p-3 rounded d-flex justify-content-between align-items-center'>
                 <h6>Temps: <span>00:00</span></h6>
-                <h6>Niveaux: <span>0</span></h6>
+                <div>
+                    <h6>Point: <span>0</span><i className="bi bi-info mx-3 border rounded-circle px-1"></i></h6>
+                </div>
             </div>
-            {/* Tableaux de score */}
-            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal1">Tableaux des scores
-                    <i className="bi bi-arrow-up-right m-1"></i>
-            </button>
+            
             <div className="App container bg-black border rounded">
                 <div className='gameRoom'>
                     {cartes.map(carte => (
@@ -142,17 +140,21 @@ function App() {
             </div>
             <div className='bg-black border mb-5 mt-3 p-3 rounded d-flex justify-content-between align-items-center'>
                 <div>
-                    <i className="bi bi-volume-up-fill"></i>
-                    <i className="bi bi-volume-mute-fill"></i>
+                    <h6>Niveaux: <span>0</span></h6>
+                </div>    
+                <div className='d-flex gap-3'>
+                    <div className="dropdown">
+                        <button className="btn btn-black text-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Thémes
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li><a className="dropdown-item" href="#">Emojis</a></li>
+                            <li><a className="dropdown-item" href="#">Number</a></li>
+                            <li><a className="dropdown-item" href="#">Coding</a></li>
+                        </ul>
+                    </div>
+                    <button type="button" className="btn btn-black text-light border">Mélanger</button>
                 </div>
-                <div>
-                    <i className="bi bi-play-fill"></i>
-                    <i className="bi bi-pause-fill"></i>
-                </div>
-                <div><i className="bi bi-sliders2-vertical" type="button" data-bs-toggle="modal" data-bs-target="#parametre"></i></div>
-
-                
-                {/*<button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal2">Ouvrir Modal 2</button> */}
             </div>
         </div>
     );

@@ -21,8 +21,9 @@ body {
 }
 
 .logo {
-  width: 75px;
+  width: 50px;
   height: auto;
+  padding: 5px;
 }
 
 
