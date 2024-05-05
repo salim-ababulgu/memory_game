@@ -28,26 +28,28 @@ import './App.css'
 function App() {
     const [cartes, setCartes] = useState([]);
     const [cartesRetournees, setCartesRetournees] = useState([]);
- 
+    const [niveauActuel, setNiveauActuel] = useState(1); // Utilisez "niveauActuel" au lieu de "niveau"
+    
     useEffect(() => {
         const generateRandomPairs = () => {
-            const colors = Object.keys(cartesData);
             let randomPairs = [];
+            const colors = Object.keys(cartesData);
             colors.forEach(color => {
-                const images = cartesData[color];
-                images.forEach(image => {
-                    for (let i = 0; i < image.quantity; i++) {
-                        randomPairs.push({ ...image, color, id: `${color}-${image.id}-${i}`, estRetournee: false });
-                    }
-                });
+                const colorData = cartesData[color];
+                if (colorData.levels.includes(niveauActuel)) {
+                    colorData.cards.forEach(card => {
+                        for (let i = 0; i < card.quantity; i++) {
+                            randomPairs.push({ ...card, color, id: `${color}-${card.id}-${i}`, estRetournee: false });
+                        }
+                    });
+                }
             });
             setCartes(shuffle(randomPairs));
         };
 
         generateRandomPairs();
-    }, []);
+    }, [niveauActuel]);
     
-  
     const shuffle = (array) => {
         let currentIndex = array.length, randomIndex;
 
@@ -80,12 +82,8 @@ function App() {
     useEffect(() => {
         if (cartesRetournees.length === 2) {
             const [id1, id2] = cartesRetournees;
-           
-
             const carte1 = cartes.find(carte => carte.id === id1 && carte.estRetournee);
             const carte2 = cartes.find(carte => carte.id === id2 && carte.estRetournee);
-
-            
 
             if (carte1 && carte2 && carte1.id.slice(0, -2) === carte2.id.slice(0, -2)) {
                 setTimeout(() => {
@@ -115,18 +113,32 @@ function App() {
         }
     }, [cartes, cartesRetournees]);
 
+    // Fonction pour passer au niveau suivant
+    const passerAuNiveauSuivant = () => {
+        setNiveauActuel(prevNiveau => prevNiveau + 1);
+    };
+
     return (
         <div>
             <Navbar />
             <Modal />
-            <div className='bg-black border mb-3 mt-5 p-3 rounded d-flex justify-content-between align-items-center'>
-                <h6>Temps: <span>00:00</span></h6>
+            <div className='bg-black border d-flex mb-3 mt-5 py-1 px-3 rounded d-flex justify-content-between align-items-center'>
+                <div className='m-0'>Temps: <span>00:00</span></div>
                 <div>
-                    <h6>Point: <span>0</span><i className="bi bi-info mx-3 border rounded-circle px-1"></i></h6>
+                    <h6 className='d-flex align-items-center justify-content-center m-0'>
+                        Point: <span className='px-1'> 0</span>
+                        <button className='mx-3 border rounded-circle p-0' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-title='Tooltip on top'>
+                            <i className="bi bi-info"></i>
+                            {/* Tooltip on top */}
+                        </button>
+                    </h6>
                 </div>
             </div>
             
-            <div className="App container bg-black border rounded">
+            <button type="button" class="btn btn-secondary" onClick={passerAuNiveauSuivant}>Niveaux suivant</button>
+            <button type="button" class="btn btn-secondary">Recommencer</button>
+            
+            <div className='App container bg-black border rounded'>
                 <div className='gameRoom'>
                     {cartes.map(carte => (
                         <Carte
@@ -138,13 +150,14 @@ function App() {
                     ))}
                 </div>
             </div>
-            <div className='bg-black border mb-5 mt-3 p-3 rounded d-flex justify-content-between align-items-center'>
+
+            <div className='bg-black border d-flex mb-3 mt-3 py-0 px-3 rounded d-flex justify-content-between align-items-center'>
                 <div>
-                    <h6>Niveaux: <span>0</span></h6>
+                    <div className='m-0' id='niveaux'>Niveaux: <span>{niveauActuel}</span></div>
                 </div>    
                 <div className='d-flex gap-3'>
                     <div className="dropdown">
-                        <button className="btn btn-black text-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button className="btn btn-black text-light border-none dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Thémes
                         </button>
                         <ul className="dropdown-menu">
@@ -153,7 +166,7 @@ function App() {
                             <li><a className="dropdown-item" href="#">Coding</a></li>
                         </ul>
                     </div>
-                    <button type="button" className="btn btn-black text-light border">Mélanger</button>
+                    <button type="button" className="btn btn-black text-light border-none">Mélanger</button>
                 </div>
             </div>
         </div>
