@@ -26,7 +26,7 @@ function Carte(props) {
                 setFlipped(false);
             }, 1000); // Ajustez selon vos préférences
         }
-        props.onClick(); // Appel de la fonction onClick parente
+        props.onClick(props.id); // Appel de la fonction onClick parente
     };
 
     return (

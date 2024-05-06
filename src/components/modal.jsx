@@ -83,8 +83,8 @@ const Modal = () => {
             </div>
 
             {/* Modal3 - Play game */}
-            <div className="modal fade text-dark" id="modal3" tabIndex="-1" aria-labelledby="modal2Label" aria-hidden="true">
-                <div className="modal-dialog">
+            <div className="modal fade text-dark" id="gameRoomModal" tabIndex="-1" aria-labelledby="modal2Label" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="modal2Label">Modal 2</h5>

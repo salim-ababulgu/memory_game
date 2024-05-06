@@ -1,6 +1,6 @@
 {
   "blue": {
-    "levels": [1, 2, 3, 4],
+    "levels": [1, 2, 3, 4, 5],
     "cards": [
       { "id": "blue-1", "path": "/src/assets/card/card-blue-angry.svg", "quantity": 2 },
       { "id": "blue-2", "path": "/src/assets/card/card-blue-malice.svg", "quantity": 2 },
@@ -11,7 +11,7 @@
     ]
   },
   "green": {
-    "levels": [2, 3, 4],
+    "levels": [2, 3, 4, 5],
     "cards": [
       { "id": "green-1", "path": "/src/assets/card/card-green-angry.svg", "quantity": 2 },
       { "id": "green-2", "path": "/src/assets/card/card-green-malice.svg", "quantity": 2 },
@@ -22,7 +22,7 @@
     ]
   },
   "orange": {
-    "levels": [3, 4],
+    "levels": [3, 4, 5],
     "cards": [
       { "id": "orange-1", "path": "/src/assets/card/card-orange-angry.svg", "quantity": 2 },
       { "id": "orange-2", "path": "/src/assets/card/card-orange-malice.svg", "quantity": 2 },
@@ -33,7 +33,7 @@
     ]
   },
   "red": {
-    "levels": [4],
+    "levels": [4, 5],
     "cards": [
       { "id": "red-1", "path": "/src/assets/card/card-red-angry.svg", "quantity": 2 },
       { "id": "red-2", "path": "/src/assets/card/card-red-malice.svg", "quantity": 2 },
