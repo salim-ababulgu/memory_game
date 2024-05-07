@@ -33,7 +33,7 @@ function App() {
     const [chrono, setChrono] = useState(null); // État local pour stocker l'identifiant de l'intervalle du chronomètre
     const [totalCartes, setTotalCartes] = useState(0); // État local pour suivre le nombre total de cartes pour l'arret du temps
     const [pairesDeCartesTrouvees, setPairesDeCartesTrouvees] = useState(0); // État pour stocker le nombre de paires trouvées
-    const [gameOverModalOpen, setGameOverModalOpen] = useState(false); // Nouvel état pour contrôler l'ouverture de la modal de fin de jeu
+    const [gameOverModalOpen, setGameOverModalOpen] = useState(true); // Nouvel état pour contrôler l'ouverture de la modal de fin de jeu
 
     useEffect(() => {
         // Code pour générer des paires aléatoires de cartes
@@ -59,6 +59,7 @@ function App() {
         generateRandomPairs();
         
     }, [niveauActuel]);
+
     
     // Fonctions shuffle, retournerCarte et effets pour gérer les paires retournées
     const shuffle = (array) => {
@@ -91,40 +92,41 @@ function App() {
     };
     
 
-    // Fonctions pour gérer les paires retournées
-    useEffect(() => {
-        if (cartesRetournees.length === 2) {
-            const [id1, id2] = cartesRetournees;
-            console.log("Cartes retournées :", id1, id2);
-            console.log("id1", "id2")
-            const carte1 = cartes.find(carte => carte.id === id1 && carte.estRetournee);
-            const carte2 = cartes.find(carte => carte.id === id2 && carte.estRetournee);
-    
-            if (carte1 && carte2 && carte1.id.slice(0, -2) === carte2.id.slice(0, -2)) {
-                // Ne modifie pas l'état des cartes si les deux cartes sont identiques
-                setPairesDeCartesTrouvees(prevPaires => prevPaires + 1);
-            } else {
-                setTimeout(() => {
-                    setCartes(prevCartes => {
-                        return prevCartes.map(carte => {
-                            if (carte.id === id1 || carte.id === id2) {
-                                return { ...carte, estRetournee: false };
-                            }
-                            return carte;
-                        });
+    // Fonctions pour gérer les paires retournées et vérifier la fin du jeu
+useEffect(() => {
+    if (cartesRetournees.length === 2) {
+        const [id1, id2] = cartesRetournees;
+        const carte1 = cartes.find(carte => carte.id === id1 && carte.estRetournee);
+        const carte2 = cartes.find(carte => carte.id === id2 && carte.estRetournee);
+
+        if (carte1 && carte2 && carte1.id.slice(0, -2) === carte2.id.slice(0, -2)) {
+            // Si les deux cartes sont identiques, incrémentez le nombre de paires trouvées
+            setPairesDeCartesTrouvees(prevPaires => prevPaires + 1);
+        } else {
+            // Sinon, retournez les cartes après un délai
+            setTimeout(() => {
+                setCartes(prevCartes => {
+                    return prevCartes.map(carte => {
+                        if (carte.id === id1 || carte.id === id2) {
+                            return { ...carte, estRetournee: false };
+                        }
+                        return carte;
                     });
-                }, 1000);
-            }
-    
-            setCartesRetournees([]);
+                });
+            }, 1000);
         }
-    
-        // Vérification de la fin du jeu
-        if (pairesDeCartesTrouvees === totalCartes / 2) {
-            clearInterval(chrono); // Arrête le chronomètre
-            setGameOverModalOpen(true); // Ouvre la modal de fin de jeu
-        }
-    }, [cartes, cartesRetournees, chrono, totalCartes, pairesDeCartesTrouvees]);
+
+        setCartesRetournees([]); // Réinitialiser les cartes retournées
+    }
+
+    // Vérification de la fin du jeu
+    if (pairesDeCartesTrouvees === totalCartes / 2) {
+        clearInterval(chrono); // Arrête le chronomètre
+        console.log("open modal");
+        setGameOverModalOpen(true); // Ouvre la modal de fin de jeu
+    }
+}, [cartes, cartesRetournees, chrono, totalCartes, pairesDeCartesTrouvees]);
+
 
 
     // Fonction pour passer au niveau suivant
@@ -155,31 +157,28 @@ function App() {
         return `${minutes}:${secondes}`;
     };
 
-    // Effet pour arrêter le chronomètre lorsque toutes les cartes sont retournées
-    useEffect(() => {
-        if (cartesRetournees.length === totalCartes) { // Vérifie si toutes les cartes sont retournées
-            clearInterval(chrono); // Arrête le chronomètre
-        }
-    }, [cartesRetournees, chrono, totalCartes]);
-
 
     return (
         <div>
             <Navbar />
-            <Modal />
+            <Modal isOpen={gameOverModalOpen} onClose={() => setGameOverModalOpen(false)}>
+                <div className="modal-content">
+                    <h2>Félicitations ! Vous avez terminé le jeu !</h2>
+                    {/* Contenu supplémentaire de la modal de fin de jeu */}
+                </div>
+            </Modal>
             <div className='bg-black border d-flex mb-3 mt-5 py-1 px-3 rounded d-flex justify-content-between align-items-center'>
             <div className='m-0'>Temps: <span>{formatTemps(temps)}</span></div>
                 <div>
                     <div className='d-flex align-items-center justify-content-center m-0'>
                         Point: <span className='px-1'> 0</span>
                         <button className='mx-3 border rounded-circle p-0' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-title='Tooltip on top'>
-                            <i className="bi bi-info"></i>
+                            <i className="bi bi-info p-1"></i>
                             {/* Tooltip on top */}
                         </button>
                     </div>
                 </div>
             </div>
-
             
             <div className='App container bg-black border rounded'>
                 <div className='gameRoom'>
@@ -225,6 +224,23 @@ function App() {
             <div className='d-flex align-items-center justify-content-between'>
                 <button type="button" class="btn btn-secondary" onClick={passerAuNiveauSuivant}>Niveaux suivant</button>
                 <button type="button" class="btn btn-secondary">Recommencer</button>
+            </div>
+
+
+
+            {/* Modal3 - Play game */}
+            <div className="modal fade text-dark" id="gameRoomModal" tabIndex="-1" aria-labelledby="modal2Label" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="modal2Label">Modal 2</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            Contenu du Modal 2
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

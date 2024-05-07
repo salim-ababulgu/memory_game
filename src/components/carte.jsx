@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const styles = {
     carte: {
@@ -17,6 +17,15 @@ const styles = {
 
 function Carte(props) {
     const [flipped, setFlipped] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const image = new Image();
+        image.src = props.imageSrc;
+        image.onload = () => {
+            setLoading(false);
+        };
+    }, [props.imageSrc]);
 
     const handleClick = () => {
         setFlipped(!flipped); // Inversion de l'état de retournement
@@ -30,12 +39,21 @@ function Carte(props) {
     };
 
     return (
-        <img 
-            src={props.imageSrc} 
-            alt={props.altText} 
-            style={{ ...styles.carte, ...(flipped ? styles.flipped : styles.unflipped) }} // Appliquer la classe flipped ou unflipped selon l'état de la carte
-            onClick={handleClick} 
-        />
+        <div style={{ position: 'relative' }}>
+            {loading && (
+                <div className="placeholder-glow" style={{ ...styles.carte }}></div>
+            )}
+            <img
+                src={props.imageSrc}
+                alt={props.altText}
+                style={{
+                    ...styles.carte,
+                    ...(flipped ? styles.flipped : styles.unflipped),
+                    visibility: loading ? 'hidden' : 'visible',
+                }} // Appliquer la classe flipped ou unflipped selon l'état de la carte
+                onClick={handleClick}
+            />
+        </div>
     );
 }
 
